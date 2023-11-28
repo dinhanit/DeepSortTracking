@@ -3,7 +3,9 @@ from Predict import prediction
 import cv2,requests
 from tracker import Tracker
 from configs import *
-# video_path = "sample/dance.mp4"
+
+ip ="192.168.162.215"
+
 video_path = 0
 
 cap = cv2.VideoCapture(video_path)
@@ -25,9 +27,8 @@ tracker = Tracker()
 
 detection_threshold = 150
 
-# names  = {}
-# ip ="192.168.162.215"
-# url =f'http://{ip}:8000/get_recognized_name'
+names  = {}
+url =f'http://{ip}:8000/get_recognized_name'
 
 while ret:
     ret, frame = cap.read()
@@ -62,15 +63,18 @@ while ret:
             fontScale = 1
             color = (0, 0, 255)
             thickness = 2
-            # try:
-            #     name = names[str(track_id)]
-            # except:
-            #     res = requests.get(url)
-            #     name = res.text[1:-1]
-            #     if name == "":
-            #         name = "Unknown"
-            #     names[str(track_id)]=name
-            # name = str(track_id)# id
+            
+            try:
+                name = names[str(track_id)]
+            except:
+                res = requests.get(url)
+                name = res.text[1:-1]
+                if name == "":
+                    name = "Unknown"
+                names[str(track_id)]=name
+            name = str(track_id)# id
+            image = cv2.putText(frame,name, org, font,fontScale, color, thickness, cv2.LINE_AA)
+            
             image = cv2.putText(frame,str(track_id), org, font,fontScale, color, thickness, cv2.LINE_AA)
             cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), (0,255,0), 2)
 
