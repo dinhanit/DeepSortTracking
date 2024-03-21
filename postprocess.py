@@ -83,7 +83,7 @@ def nms(bboxes: np.array, scores: np.array, iou_threshold: float) -> np.array:
 
     return selected_indices
 
-def postprocess(prediction: np.array, conf_thres: float = 0.15, iou_thres: float = 0.45, max_det: int = 300) -> np.array:
+def postprocess(prediction: np.array, conf_thres: float = 0.15, iou_thres: float = 0.1, max_det: int = 300) -> np.array:
     """
     Perform post-processing on object detection predictions.
 
@@ -105,7 +105,6 @@ def postprocess(prediction: np.array, conf_thres: float = 0.15, iou_thres: float
         x = x.T
         if len(x) == 0:
             continue
-        x[:, 4:] *= x[:, 3:4]
         box = convert_xywh_to_xyxy(x[:, :4])
 
         conf = x[:, 4:].max(1)
@@ -119,8 +118,8 @@ def postprocess(prediction: np.array, conf_thres: float = 0.15, iou_thres: float
             sorted_indices = np.argsort(-x[:, 4])
             x = x[sorted_indices[:max_nms]]
 
-        c = x[:, 5:6] * max_wh
-        boxes, scores = x[:, :4] + c, x[:, 4]
+        boxes, scores = x[:, :4], x[:, 4]
+        
         i = nms(boxes, scores, iou_thres)
         if len(i) > max_det:
             i = i[:max_det]

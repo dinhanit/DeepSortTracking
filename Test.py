@@ -25,7 +25,7 @@ cfg = CFG()
 
 tracker = Tracker()
 
-detection_threshold = 150
+detection_threshold = 0.5
 
 while ret:
     ret, frame = cap.read()
@@ -47,7 +47,7 @@ while ret:
         y2 = int(y2)
         class_id = int(class_id)
         detections.append([x1, y1, x2, y2, score])
-        
+
     if len(detections)>0:
         tracker.update(frame, detections)
 
@@ -63,7 +63,6 @@ while ret:
 
             image = cv2.putText(frame,str(track_id), org, font,fontScale, color, thickness, cv2.LINE_AA)
             cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), (0,255,0), 2)
-
     cv2.imshow('frame', frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
