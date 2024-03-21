@@ -83,7 +83,7 @@ def nms(bboxes: np.array, scores: np.array, iou_threshold: float) -> np.array:
 
     return selected_indices
 
-def postprocess(prediction: np.array, conf_thres: float = 0.15, iou_thres: float = 0.1, max_det: int = 300) -> np.array:
+def postprocess(prediction: np.array, conf_thres: float = 0.15, iou_thres: float = 0.45, max_det: int = 300) -> np.array:
     """
     Perform post-processing on object detection predictions.
 
